@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-#开发者：Bright Fang
-#开发时间：2023/2/14 20:10
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -11,7 +9,7 @@ from matplotlib import pyplot as plt
 import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 env = gym.make("Pendulum-v0").unwrapped
-'''Pendulum环境状态特征是三个，杆子的sin(角度)、cos（角度）、角速度，（状态是无限多个，因为连续），动作值是力矩，限定在[-2,2]之间的任意的小数，所以是连续的（动作也是无限个）'''
+'''Pendulum'''
 state_number=env.observation_space.shape[0]
 action_number=env.action_space.shape[0]
 max_action = env.action_space.high[0]
@@ -45,8 +43,8 @@ class ActorNet(nn.Module):
         inputstate=F.relu(inputstate)
         inputstate=self.y1_to_y2(inputstate)
         inputstate=F.relu(inputstate)
-        mean=max_action*torch.tanh(self.out(inputstate))#输出概率分布的均值mean
-        log_std=self.std_out(inputstate)#softplus激活函数的值域>0
+        mean=max_action*torch.tanh(self.out(inputstate))#
+        log_std=self.std_out(inputstate)#softplus
         log_std=torch.clamp(log_std,-20,2)
         std=log_std.exp()
         return mean,std
@@ -91,15 +89,15 @@ class Memory():
         self.memory_counter=0
     '''存储记忆'''
     def store_transition(self,s,a,r,s_):
-        tran = np.hstack((s, [a.squeeze(0),r], s_))  # 把s,a,r,s_困在一起，水平拼接
-        index = self.memory_counter % self.capacity#除余得索引
-        self.mem[index, :] = tran  # 给索引存值，第index行所有列都为其中一次的s,a,r,s_；mem会是一个capacity行，（s+a+r+s_）列的数组
+        tran = np.hstack((s, [a.squeeze(0),r], s_))  #
+        index = self.memory_counter % self.capacity#
+        self.mem[index, :] = tran  # 
         self.memory_counter+=1
     '''随机从记忆库里抽取'''
     def sample(self,n):
-        assert self.memory_counter>=self.capacity,'记忆库没有存满记忆'
-        sample_index = np.random.choice(self.capacity, n)#从capacity个记忆里随机抽取n个为一批，可得到抽样后的索引号
-        new_mem = self.mem[sample_index, :]#由抽样得到的索引号在所有的capacity个记忆中  得到记忆s，a，r，s_
+        assert self.memory_counter>=self.capacity,'not full in memory'
+        sample_index = np.random.choice(self.capacity, n)#
+        new_mem = self.mem[sample_index, :]#
         return new_mem
 class Actor():
     def __init__(self):
@@ -132,7 +130,7 @@ class Actor():
 
 class Critic():
     def __init__(self):
-        self.critic_v,self.target_critic_v=CriticNet(state_number),CriticNet(state_number)#改网络输入状态，生成一个Q值
+        self.critic_v,self.target_critic_v=CriticNet(state_number),CriticNet(state_number)#
         self.optimizer = torch.optim.Adam(self.critic_v.parameters(), lr=value_lr,eps=1e-5)
         self.lossfunc = nn.MSELoss()
     def soft_update(self):
@@ -150,7 +148,7 @@ class Critic():
 
 class Q_Critic():
     def __init__(self):
-        self.q1_net=QNet(state_number,action_number)#改网络输入状态，生成一个Q值
+        self.q1_net=QNet(state_number,action_number)#
         self.q1_optimizer = torch.optim.Adam(self.q1_net.parameters(), lr=q_lr,eps=1e-5)
         self.lossfunc = nn.MSELoss()
     def get_q(self,s,a):
@@ -162,20 +160,20 @@ class Q_Critic():
         loss.backward()
         self.q1_optimizer.step()
 if Switch==0:
-    print('SAC训练中...')
+    print('SAC training...')
     actor = Actor()
     critic = Critic()
     q_critic=Q_Critic()
     M = Memory(MemoryCapacity, 2 * state_number + action_number + 1)
     all_ep_r = []
     for episode in range(EP_MAX):
-        observation = env.reset()  # 环境重置
+        observation = env.reset()  # 
         reward_totle = 0
         for timestep in range(EP_LEN):
             if RENDER:
                 env.render()
             action = actor.choose_action(observation)
-            observation_, reward, done, info = env.step(action)  # 单步交互
+            observation_, reward, done, info = env.step(action)  # 
             M.store_transition(observation, action, reward, observation_)
             # 记忆库存储
             # 有的2000个存储数据就开始学习
@@ -210,7 +208,7 @@ if Switch==0:
         print("Ep: {} rewards: {}".format(episode, reward_totle))
         # if reward_totle > -10: RENDER = True
         all_ep_r.append(reward_totle)
-        if episode % 20 == 0 and episode > 200:#保存神经网络参数
+        if episode % 20 == 0 and episode > 200:
             save_data = {'net': actor.action_net.state_dict(), 'opt': actor.optimizer.state_dict(), 'i': episode}
             torch.save(save_data, "E:\model_SAC.pth")
     env.close()
@@ -229,7 +227,7 @@ else:
         for timestep in range(EP_LEN):
             env.render()
             action = aa.choose_action(state)
-            new_state, reward, done, info = env.step(action)  # 执行动作
+            new_state, reward, done, info = env.step(action) 
             total_rewards += reward
             state = new_state
         print("Score：", total_rewards)
