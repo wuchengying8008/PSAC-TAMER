@@ -1,0 +1,10 @@
+INSERT INTO stock_sectors (sector_id, sector_date, sector_name, content_id, stock_view) VALUES('SS000001', '2022-04-11', 'battery', '20220411SS000001', '-');
+INSERT INTO stock_sectors (sector_id, sector_date, sector_name, content_id, stock_view) VALUES('SS000002', '2022-04-12', 'Computer equipment', '20220412SS000002', 'hold');
+INSERT INTO stock_sectors (sector_id, sector_date, sector_name, content_id, stock_view) VALUES('SS000003', '2022-04-13', 'Steel industry', '20220413SS000003', 'hold');
+INSERT INTO stock_sectors (sector_id, sector_date, sector_name, content_id, stock_view) VALUES('SS000004', '2022-04-14', 'Food and Beverage', '20220414SS000004', '-');
+INSERT INTO stock_sectors (sector_id, sector_date, sector_name, content_id, stock_view) VALUES('SS000005', '2022-04-15', 'Chemical products', '20220415SS000005', 'expands');
+INSERT INTO stock_sectors (sector_id, sector_date, sector_name, content_id, stock_view) VALUES('SS000006', '2022-04-16', 'Cultural media', '20220416SS000006', 'expands');
+INSERT INTO stock_sectors (sector_id, sector_date, sector_name, content_id, stock_view) VALUES('SS000007', '2022-04-17', 'Glass fiber', '20220417SS000007', 'expands');
+INSERT INTO stock_sectors (sector_id, sector_date, sector_name, content_id, stock_view) VALUES('SS000008', '2022-04-18', 'General equipment', '20220418SS000008', 'hold');
+INSERT INTO stock_sectors (sector_id, sector_date, sector_name, content_id, stock_view) VALUES('SS000009', '2022-04-19', 'Real estate development', '20220419SS000009', 'expands');
+INSERT INTO stock_sectors (sector_id, sector_date, sector_name, content_id, stock_view) VALUES('SS000010', '2022-04-20', 'public utility', '20220420SS000010', 'hold');
