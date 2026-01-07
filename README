@@ -1,0 +1,26 @@
+1. unzip PSAC-TAMER.zip
+2. Run `data/moca_dataset.py` and `data/preprocessor.py` to generate dialogue data files, replacing the data with real data and storing it in `*.sql` files.
+3. Run `models/psac_tamer.py` to test whether the model can generate dialogues.
+4. Run `training/trainer.py` to test whether the model can be trained.
+5. Run `main.py` with the following commands:
+   - Train a new model:
+     ```
+     python main.py train --config configs/default.yaml --data **filename
+     ```
+   - Evaluate an existing model:
+     ```
+     python main.py evaluate --model checkpoints/model.pth --data data/**filename
+     ```
+   - Interactive dialogue:
+     ```
+     python main.py interact --model checkpoints/**modelfilepath
+     ```
+   - Run ablation experiments:
+     ```
+     python main.py ablation --config configs/**ablation_study.yaml
+     ```
+   - Visualize training results:
+     ```
+     python main.py visualize --log-dir logs/**experiment_20240101
+     ```
+   Note: Replace `**` with actual file names.
